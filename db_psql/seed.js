@@ -2,7 +2,7 @@ const path = require('path');
 const db = require('./connection.js');
 
 // ---- to create schema in the db, in terminal enter:
-// ---- \i schema.sql
+// ---- \i db_psql/schema.sql
 
 // file paths for csv's
 const listing_data_path = path.join(__dirname, '../data_generator/csv/psql_listing_data.csv');
@@ -11,13 +11,13 @@ const user_data_path = path.join(__dirname, '../data_generator/csv/psql_user_dat
 const user_favorites_data_path = path.join(__dirname, '../data_generator/csv/psql_user_favorites_data.csv');
 
 // helper function for seeding data into tables
-const seed_table = (queryString, successString) => {
+const seed_table = (queryString, cb) => {
   db.client.query(queryString,
     (err, res) => {
       if (err) {
         console.log('error seeding psql', err);
       } else {
-        console.log(successString);
+        cb;
       }
     }
   );
@@ -33,7 +33,7 @@ const users_queryString = `COPY trelia.users(user_name) FROM '${user_data_path}'
 const user_favorites_queryString = `COPY trelia.user_favorites(user_id, favorite_id) FROM '${user_favorites_data_path}' DELIMITER ',' CSV HEADER`;
 
 // seed the tables
-seed_table(listings_queryString, 'listings data successfully seeded');
-seed_table(similar_homes_queryString, 'similar_homes data successfully seeded');
-seed_table(users_queryString, 'user data successfully seeded');
-seed_table(user_favorites_queryString, 'user_favorites data successfully seeded');
+seed_table(listings_queryString, console.log('seeding listings data'));
+seed_table(similar_homes_queryString, console.log('seeding similar_homes data'));
+seed_table(users_queryString, console.log('seeding users data'));
+seed_table(user_favorites_queryString, console.log('seeding user_favorites data'));

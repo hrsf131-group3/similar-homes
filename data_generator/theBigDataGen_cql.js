@@ -1,15 +1,14 @@
 const fs = require('fs');
-const csvWriter = require('csv-write-stream');
 const faker = require('faker');
 
 // number of primary listings = 10M
-let numListings = 100;
+let numListings = 10000000;
 
 // number of similar homes = 15 per listing
 let numSimilarHomes = 15
 
 // users = 1M
-let numUsers = 100;
+let numUsers = 1000000;
 
 // helper function to generate random numbers
 const getRandomIntInclusive = (min, max, skew = 1) => {
@@ -56,7 +55,7 @@ const generateFavoriteListings = () => {
 
 // generate data for home_listings_by_id table
 const writeHomeListingData = fs.createWriteStream('./data_generator/csv/cql_home_listings_data.csv');
-writeHomeListingData.write('listing_id,price,size_bd,size_ba,size_sqft,street_address,neighborhood,listing_image,favorite, similar_homes\n');
+writeHomeListingData.write('listing_id|price|size_bd|size_ba|size_sqft|street_address|neighborhood|listing_image|favorite|similar_homes\n');
 
 const writeHomeListings = (writer, callback) => {
   let i = numListings;
@@ -65,6 +64,11 @@ const writeHomeListings = (writer, callback) => {
   const write = () => {
     let ok = true;
     do {
+       // track progress fo every 1M rows
+       if (i % 1000000 === 0) {
+        console.log(`${i} rows remaining`);
+      }
+
       i -= 1;
 
       const listing_id = id;
@@ -74,7 +78,8 @@ const writeHomeListings = (writer, callback) => {
       const size_sqft = getRandomIntInclusive(12,40, 2) * 100;
       const street_address = faker.address.streetAddress();
       const neighborhood = faker.fake("{{address.county}}, {{address.city}}, {{address.stateAbbr}}");
-      const listing_image = 'placeholder.com';
+      const img_num = i % 1000;
+      const listing_image = `https://sdc-trelia.s3-us-west-1.amazonaws.com/${img_num}.jpg`;
       const favorite = false;
       const similar_homes = generateSimilarHomes();
 
@@ -105,7 +110,7 @@ writeHomeListings(writeHomeListingData, () => {
 
 // generate data for favorite_listings table
 const writeFavoriteListingsData = fs.createWriteStream('./data_generator/csv/cql_favorite_listings_data.csv');
-writeFavoriteListingsData.write('user_id,user_name,favorite_homes\n');
+writeFavoriteListingsData.write('user_id|user_name|favorite_homes\n');
 
 const writeFavoriteListings = (writer, callback) => {
   let i = numUsers;
