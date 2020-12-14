@@ -1,1 +1,0 @@
-ssh -i "/Users/lucychen/Hack Reactor/image-carousel/imageCarousel.pem" ubuntu@ec2-13-56-19-216.us-west-1.compute.amazonaws.com
