@@ -5,7 +5,7 @@ const path = require('path');
 const controller = require('../controller/listing.js');
 
 const app = express();
-const port = 8030;
+const port = 8080;
 const dist = path.join(__dirname, '../client/dist');
 
 // app.use(morgan('dev'));
@@ -23,6 +23,6 @@ app.put('*/similar-homes', controller.updateSimilar);
 // delete a similar home related to a listing id
 app.delete('*/similar-homes', controller.deleteSimilar);
 
-app.listen(8030, () => {
+app.listen(port, () => {
   console.log(`listening on http://localhost:${port}`);
 });

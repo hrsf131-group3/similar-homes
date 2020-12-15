@@ -1,0 +1,16 @@
+.env
+node_modules
+
+.gitignore
+package-lock.json
+
+data_generator
+
+db_psql/constraints.sql
+db_psql/schema.sql
+db_psql/seed.js
+
+load_testing
+newrelic.js
+
+specs

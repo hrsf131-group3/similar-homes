@@ -1,21 +1,13 @@
-const { Client, Pool } = require('pg');
-
-const client_config = {
-  database: 'sdc',
-  port: 5432,
-}
+const { Pool } = require('pg');
 
 const pool_config = {
+  host: '',
   database: 'sdc',
+  user: '',
+  password: '',
   max: 10,
   port: 5432,
-}
-
-const client = new Client(client_config);
-client
-  .connect()
-  .then(() => console.log('connected to PSQL'))
-  .catch((e) => console.log(e));
+};
 
 const pool = new Pool(pool_config);
 pool
@@ -23,5 +15,4 @@ pool
   .then(() => console.log('connected to PSQL'))
   .catch((e) => console.log(e));
 
-module.exports.client = client;
-module.exports.pool = client;
+module.exports.pool = pool;
